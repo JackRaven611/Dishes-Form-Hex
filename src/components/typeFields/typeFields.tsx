@@ -42,31 +42,28 @@ export const TypeFields = ({ inputs, setInputs }: TypeFieldsProps) => {
   if (inputs.type === "pizza") {
     return (
       <>
-        <div>
-          <label htmlFor="slices">Number of Slices</label>
-          <input
-            id="slices"
-            type="number"
-            min={1}
-            max={35}
-            placeholder="Number of Slices"
-            onChange={handleSlicesChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="diameter">Diameter</label>
-          <input
-            id="diameter"
-            type="number"
-            step="0.1"
-            min={10}
-            max={50}
-            placeholder="Diameter"
-            onChange={handleDiameterChange}
-            required
-          />
-        </div>
+        <label htmlFor="slices">Number of Slices</label>
+        <input
+          id="slices"
+          type="number"
+          min={1}
+          max={35}
+          placeholder="Number of Slices"
+          onChange={handleSlicesChange}
+          required
+        />
+
+        <label htmlFor="diameter">Diameter</label>
+        <input
+          id="diameter"
+          type="number"
+          step="0.1"
+          min={10}
+          max={50}
+          placeholder="Diameter"
+          onChange={handleDiameterChange}
+          required
+        />
       </>
     );
   } else if (inputs.type === "soup") {

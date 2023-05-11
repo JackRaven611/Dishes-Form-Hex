@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TypeFields } from "./components/typeFields/typeFields";
-import "./App.css";
+import { AppStyled } from "./AppStyled";
 
 function App() {
   const [inputs, setInputs] = useState({
@@ -32,7 +32,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <AppStyled>
       <form action="">
         <ul>
           <li>
@@ -84,7 +84,7 @@ function App() {
           Submit
         </button>
       </form>
-    </div>
+    </AppStyled>
   );
 }
 
