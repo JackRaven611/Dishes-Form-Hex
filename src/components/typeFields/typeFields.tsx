@@ -7,7 +7,7 @@ interface TypeFieldsProps {
     type: string;
     no_of_slices: string;
     diameter: string;
-    spiciness: string;
+    spiciness_scale: string;
     slices_of_bread: string;
   };
   setInputs: Dispatch<
@@ -17,7 +17,7 @@ interface TypeFieldsProps {
       type: string;
       no_of_slices: string;
       diameter: string;
-      spiciness: string;
+      spiciness_scale: string;
       slices_of_bread: string;
     }>
   >;
@@ -33,7 +33,7 @@ export const TypeFields = ({ inputs, setInputs }: TypeFieldsProps) => {
   const handleSpicinessChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setInputs({ ...inputs, spiciness: event.target.value });
+    setInputs({ ...inputs, spiciness_scale: event.target.value });
   };
   const handleBreadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, slices_of_bread: event.target.value });

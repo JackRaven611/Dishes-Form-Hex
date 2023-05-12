@@ -1,28 +1,18 @@
 import { useState } from "react";
 import { TypeFields } from "./components/typeFields/typeFields";
-import { AppStyled } from "./AppStyled";
+import { AppStyled, MessageArea } from "./AppStyled";
 
 function App() {
+  const [isError, setIsError] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     preparation_time: "",
     type: "pizza",
     no_of_slices: "",
     diameter: "",
-    spiciness: "",
+    spiciness_scale: "",
     slices_of_bread: "",
   });
-
-  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setInputs({
-      ...inputs,
-      type: event.target.value,
-      no_of_slices: "",
-      diameter: "",
-      spiciness: "",
-      slices_of_bread: "",
-    });
-  };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, name: event.target.value });
@@ -31,9 +21,67 @@ function App() {
     setInputs({ ...inputs, preparation_time: event.target.value });
   };
 
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setInputs({
+      ...inputs,
+      type: event.target.value,
+      no_of_slices: "",
+      diameter: "",
+      spiciness_scale: "",
+      slices_of_bread: "",
+    });
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const checkType = () => {
+      if (inputs.type === "pizza") {
+        return {
+          name: inputs.name,
+          preparation_time: inputs.preparation_time,
+          type: inputs.type,
+          no_of_slices: inputs.no_of_slices,
+          diameter: inputs.diameter,
+        };
+      } else if (inputs.type === "soup") {
+        return {
+          name: inputs.name,
+          preparation_time: inputs.preparation_time,
+          type: inputs.type,
+          spiciness_scale: inputs.spiciness_scale,
+        };
+      } else {
+        return {
+          name: inputs.name,
+          preparation_time: inputs.preparation_time,
+          type: inputs.type,
+          slices_of_bread: inputs.slices_of_bread,
+        };
+      }
+    };
+
+    const data = checkType();
+
+    try {
+      fetch("https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }).then((response) => {
+        if (!response.ok) {
+          setIsError(true);
+        } else {
+          setIsError(false);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <AppStyled>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <ul>
           <li>
             <label htmlFor="name">Name</label>
@@ -74,15 +122,10 @@ function App() {
             <TypeFields inputs={inputs} setInputs={setInputs} />
           </li>
         </ul>
-
-        <button
-          type="button"
-          onClick={() => {
-            console.log(inputs);
-          }}
-        >
-          Submit
-        </button>
+        <MessageArea>
+          {isError ? "Something went wrong, please try again" : null}
+        </MessageArea>
+        <button type="submit">Submit</button>
       </form>
     </AppStyled>
   );
