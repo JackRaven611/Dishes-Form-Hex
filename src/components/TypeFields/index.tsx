@@ -46,7 +46,7 @@ export const TypeFields = ({ inputs, setInputs }: TypeFieldsProps) => {
         <input
           id="slices"
           type="number"
-          min={1}
+          // min={1}
           max={35}
           placeholder="Number of Slices"
           onChange={handleSlicesChange}

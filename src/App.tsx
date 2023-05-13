@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { TypeFields } from "./components/typeFields/typeFields";
-import { AppStyled, MessageArea } from "./AppStyled";
+import { MainForm } from "./components/Form";
+import { AppStyled, FormFieldsList, SubmitButton } from "./AppStyled";
+import { TypeFields } from "./components/TypeFields";
+import { MessageArea } from "./components/MessageArea";
 
 function App() {
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     preparation_time: "",
@@ -31,58 +34,14 @@ function App() {
       slices_of_bread: "",
     });
   };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const checkType = () => {
-      if (inputs.type === "pizza") {
-        return {
-          name: inputs.name,
-          preparation_time: inputs.preparation_time,
-          type: inputs.type,
-          no_of_slices: inputs.no_of_slices,
-          diameter: inputs.diameter,
-        };
-      } else if (inputs.type === "soup") {
-        return {
-          name: inputs.name,
-          preparation_time: inputs.preparation_time,
-          type: inputs.type,
-          spiciness_scale: inputs.spiciness_scale,
-        };
-      } else {
-        return {
-          name: inputs.name,
-          preparation_time: inputs.preparation_time,
-          type: inputs.type,
-          slices_of_bread: inputs.slices_of_bread,
-        };
-      }
-    };
-
-    const data = checkType();
-
-    try {
-      fetch("https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }).then((response) => {
-        if (!response.ok) {
-          setIsError(true);
-        } else {
-          setIsError(false);
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <AppStyled>
-      <form onSubmit={handleSubmit}>
-        <ul>
+      <MainForm
+        inputs={inputs}
+        setIsLoading={setIsLoading}
+        setIsError={setIsError}
+      >
+        <FormFieldsList>
           <li>
             <label htmlFor="name">Name</label>
             <input
@@ -121,12 +80,10 @@ function App() {
           <li>
             <TypeFields inputs={inputs} setInputs={setInputs} />
           </li>
-        </ul>
-        <MessageArea>
-          {isError ? "Something went wrong, please try again" : null}
-        </MessageArea>
-        <button type="submit">Submit</button>
-      </form>
+        </FormFieldsList>
+        <MessageArea isError={isError} isLoading={isLoading} />
+        <SubmitButton type="submit">Submit</SubmitButton>
+      </MainForm>
     </AppStyled>
   );
 }
